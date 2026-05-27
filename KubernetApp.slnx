@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="KubernetApp.Core/KubernetApp.Core.csproj" />
+  <Project Path="KubernetApp.UI/KubernetApp.UI.csproj" />
+</Solution>
