@@ -1,0 +1,37 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using MikroTikSDN.Core.Models;
+
+namespace MikroTikSDN.Core.Services
+{
+    /// <summary>
+    /// Gestão de interfaces de rede (todas e wireless).
+    /// API: /rest/interface e /rest/interface/wireless
+    /// </summary>
+    public class InterfaceService
+    {
+        private readonly RouterClient _client;
+
+        public InterfaceService(RouterClient client) => _client = client;
+
+        /// <summary>Lista todas as interfaces do router.</summary>
+        public Task<List<NetworkInterface>> GetAllAsync()
+            => _client.GetAsync<List<NetworkInterface>>("interface");
+
+        /// <summary>Lista apenas as interfaces wireless.</summary>
+        public Task<List<WirelessInterface>> GetWirelessAsync()
+            => _client.GetAsync<List<WirelessInterface>>("interface/wireless");
+
+        /// <summary>Ativa uma interface wireless pelo seu ID.</summary>
+        public Task EnableWirelessAsync(string id)
+            => _client.PostAsync($"interface/wireless/enable", new Dictionary<string, string> { { ".id", id } });
+
+        /// <summary>Desativa uma interface wireless pelo seu ID.</summary>
+        public Task DisableWirelessAsync(string id)
+            => _client.PostAsync($"interface/wireless/disable", new Dictionary<string, string> { { ".id", id } });
+
+        /// <summary>Edita configurações de uma interface wireless.</summary>
+        public Task<WirelessInterface> UpdateWirelessAsync(string id, object changes)
+            => _client.PatchAsync<WirelessInterface>("interface/wireless", id, changes);
+    }
+}
